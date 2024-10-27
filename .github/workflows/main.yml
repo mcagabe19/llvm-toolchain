@@ -12,7 +12,7 @@ jobs:
       - name: Get Dependencies
         run: |
           sudo apt update
-          sudo apt upgrade -y
+          # sudo apt upgrade -y
           sudo apt install repo python3
 
       - name: Get llvm-toolchain
