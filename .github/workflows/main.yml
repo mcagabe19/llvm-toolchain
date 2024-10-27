@@ -37,7 +37,7 @@ jobs:
         run: |
           sudo apt update
           # sudo apt upgrade -y
-          sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gn
+          sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
           curl https://storage.googleapis.com/git-repo-downloads/repo > repo
           sudo mv repo /usr/local/bin
           sudo chmod a+rx /usr/local/bin/repo
