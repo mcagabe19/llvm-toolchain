@@ -1,0 +1,25 @@
+name: CI
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Get Dependencies
+        run: |
+          sudo apt update
+          sudo apt upgrade -y
+          sudo apt install repo python3
+
+      - name: Get llvm-toolchain
+        run: |
+          mkdir llvm-toolchain && cd llvm-toolchain
+          repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
+          repo sync -c
+
+      - name: Build llvm-toolchain
+        run: cd lvm-toolchain && python toolchain/llvm_android/build.py --no-mlgo --skip-tests --lto --no-build windows
