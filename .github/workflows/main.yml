@@ -9,11 +9,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
+      - name: Cleanup Storage
+        run: |
+          docker system prune -a -f --volumes || true
+          sudo apt-get autoremove --purge 'libllvm*' 'clang*' 'libcuda*' 'libvulkan*' 'swift*' 'mono*' 'azure*' 'ghc*' 'dotnet*' 'firefox' 'libcublas*' 'cuda*' 'x11-*'
+          sudo apt-get autoremove -y
+          sudo apt-get autoclean
+          sudo apt-get clean
+          sudo rm -rf /usr/local/lib/python*/dist-packages
+          sudo rm -rf /usr/local/lib/python*/site-packages
+          sudo rm -rf /usr/local/lib/python*/__pycache__
+          sudo rm -rf ~/.cache/pip
+          sudo rm -rf /usr/local/lib/python3*/dist-packages/*
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf $AGENT_TOOLSDIRECTORY/*
+          sudo rm -rf ~/.npm
+          sudo rm -rf ~/.cache
+          sudo rm -rf /usr/local/lib/node_modules
+          sudo rm -rf /usr/local/lib/ruby/gems/*
+          sudo rm -rf /var/log/*
+          sudo rm -rf /tmp/*
+          df -ha
+
       - name: Get Dependencies
         run: |
-          sudo apt update
+          # sudo apt update
           # sudo apt upgrade -y
-          sudo apt install repo python3
+          # sudo apt install repo
+          curl https://storage.googleapis.com/git-repo-downloads/repo > repo
+          sudo mv repo /usr/local/bin
+          sudo chmod a+rx /usr/local/bin/repo
 
       - name: Get llvm-toolchain
         run: |
