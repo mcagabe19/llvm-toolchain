@@ -11,26 +11,31 @@ jobs:
 
       - name: Cleanup Storage
         run: |
+          # Stop and remove Docker services
+          sudo systemctl stop docker || true
+          sudo systemctl disable docker || true
           docker system prune -a -f --volumes || true
-          sudo apt-get autoremove --purge 'libllvm*' 'clang*' 'libcuda*' 'libvulkan*' 'swift*' 'mono*' 'azure*' 'ghc*' 'dotnet*' 'firefox' 'libcublas*' 'cuda*' 'x11-*'
+
+          # Remove Docker packages and dependencies
+          sudo apt-get autoremove --purge -y docker-ce docker-ce-cli containerd.io docker-compose-plugin \
+            'linux-*' 'postgresql*' 'mysql*' 'manpages*' 'ruby*' 'gdb*' 'llvm*' 'perl*' 'libllvm*' 'clang*' \
+            'libcuda*' 'libvulkan*' 'swift*' 'mono*' 'azure*' 'ghc*' 'dotnet*' 'firefox' 'libcublas*' 'cuda*' 'x11-*'
           sudo apt-get autoremove -y
-          sudo apt-get autoclean
-          sudo apt-get clean
-          sudo rm -rf /usr/local/lib/python*/dist-packages
-          sudo rm -rf /usr/local/lib/python*/site-packages
-          sudo rm -rf /usr/local/lib/python*/__pycache__
-          sudo rm -rf ~/.cache/pip
-          sudo rm -rf /usr/local/lib/python3*/dist-packages/*
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf $AGENT_TOOLSDIRECTORY/*
-          sudo rm -rf ~/.npm
-          sudo rm -rf ~/.cache
-          sudo rm -rf /usr/local/lib/node_modules
-          sudo rm -rf /usr/local/lib/ruby/gems/*
-          sudo rm -rf /var/log/*
-          sudo rm -rf /tmp/*
+          sudo apt-get autoclean -y
+          sudo apt-get clean -y
+
+          # Remove Docker-related directories and binaries
+          sudo rm -rf /var/lib/docker /var/lib/containerd /etc/docker /usr/bin/docker* \
+            /usr/bin/containerd* /usr/bin/runc /run/docker /var/run/docker.sock /var/log/docker*
+
+          # Remove other unnecessary files and directories
+          sudo rm -rf /usr/local/lib/python*/dist-packages /usr/local/lib/python*/site-packages \
+            /usr/local/lib/python*/__pycache__ ~/.cache/pip /usr/local/lib/python3*/dist-packages/* \
+            /usr/share/dotnet /usr/local/lib/android /opt/ghc $AGENT_TOOLSDIRECTORY/* ~/.npm \
+            ~/.cache /usr/local/lib/node_modules /usr/local/lib/ruby/gems/* /var/log/* /tmp/* \
+            /usr/share/man /usr/share/doc /usr/share/locale $ANDROID_HOME/..
+
+          # Output free disk space to verify
           df -ha
 
       - name: Get Dependencies
@@ -48,4 +53,4 @@ jobs:
           repo sync -c
 
       - name: Build llvm-toolchain
-        run: CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ python toolchain/llvm_android/build.py --skip-tests --lto --no-build windows
+        run: python toolchain/llvm_android/build.py --skip-tests --lto --no-build windows
