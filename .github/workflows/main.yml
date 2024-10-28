@@ -17,9 +17,9 @@ jobs:
           docker system prune -a -f --volumes || true
 
           # Remove Docker packages and dependencies
-          sudo apt-get autoremove --purge -y docker-ce docker-ce-cli containerd.io docker-compose-plugin \
-            'postgresql*' 'mysql*' 'manpages*' 'ruby*' 'gdb*' 'llvm*' 'perl*' 'libllvm*' 'clang*' 'libcuda*' \
-            'libvulkan*' 'swift*' 'mono*' 'azure*' 'ghc*' 'dotnet*' 'firefox' 'libcublas*' 'cuda*' 'x11-*'
+          sudo apt-get autoremove --purge -y snapd docker-ce docker-ce-cli containerd.io docker-compose-plugin \
+            'postgresql*' 'mysql*' 'ruby*' 'gdb*' 'llvm*' 'libllvm*' 'clang*' 'libcuda*' 'cuda*' 'x11-*' \
+            'libvulkan*' 'swift*' 'mono*' 'azure*' 'ghc*' 'dotnet*' 'firefox' 'google-chrome-stable' 'libcublas*'
           sudo apt-get autoremove -y
           sudo apt-get autoclean -y
           sudo apt-get clean -y
