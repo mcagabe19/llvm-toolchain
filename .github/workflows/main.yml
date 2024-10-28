@@ -18,8 +18,8 @@ jobs:
 
           # Remove Docker packages and dependencies
           sudo apt-get autoremove --purge -y docker-ce docker-ce-cli containerd.io docker-compose-plugin \
-            'linux-*' 'postgresql*' 'mysql*' 'manpages*' 'ruby*' 'gdb*' 'llvm*' 'perl*' 'libllvm*' 'clang*' \
-            'libcuda*' 'libvulkan*' 'swift*' 'mono*' 'azure*' 'ghc*' 'dotnet*' 'firefox' 'libcublas*' 'cuda*' 'x11-*'
+            'postgresql*' 'mysql*' 'manpages*' 'ruby*' 'gdb*' 'llvm*' 'perl*' 'libllvm*' 'clang*' 'libcuda*' \
+            'libvulkan*' 'swift*' 'mono*' 'azure*' 'ghc*' 'dotnet*' 'firefox' 'libcublas*' 'cuda*' 'x11-*'
           sudo apt-get autoremove -y
           sudo apt-get autoclean -y
           sudo apt-get clean -y
